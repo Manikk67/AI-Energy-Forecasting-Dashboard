@@ -15,7 +15,7 @@ st.markdown("AI-based Electricity Consumption Prediction System")
 # -----------------------------
 # Load Data
 # -----------------------------
-df = load_and_clean_data()   # ✅ Uses ucimlrepo, no local path
+df = load_and_clean_data()   # ✅ Updated: no path needed
 daily_power = get_daily_series(df)
 
 # -----------------------------
@@ -120,4 +120,3 @@ st.download_button(
 )
 
 st.info("Project by Mani – AI Energy Forecasting System 🚀")
-
