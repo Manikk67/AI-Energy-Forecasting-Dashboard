@@ -1,76 +1,174 @@
-**AI-based Energy Consumption Forecasting**
+⚡ AI-Based Energy Consumption Forecasting Dashboard
 
-**📌 Problem Statement**
-
-
-
-**Electricity demand varies due to seasonal and behavioral patterns.**
-
-**Accurate forecasting improves grid planning and reduces operational costs.**
+A complete machine learning pipeline and interactive Streamlit dashboard for forecasting electricity consumption using historical smart meter data.
 
 
+---
 
-**📊 Dataset**
+🚀 Project Overview
 
+Electricity demand changes due to seasonal trends, daily behavior patterns, and long-term usage variations.
 
+This project builds an end-to-end forecasting system that:
 
-**Individual Household Electric Power Consumption**
+Cleans and processes 2M+ smart meter records
 
-**(2006–2010 minute-level smart meter data)**
+Performs time-series analysis
 
+Compares baseline and machine learning models
 
+Predicts future electricity consumption
 
-**🔎 Steps Performed**
+Provides an interactive web dashboard
 
-
-
-**Data Cleaning \& Missing Value Handling**
+Allows CSV download of forecast results
 
 
 
-**Time Series Resampling (Daily)**
+---
+
+📊 Dataset
+
+Individual Household Electric Power Consumption Dataset (2006–2010)
+
+⚠️ The dataset is not included in this repository due to GitHub file size limits.
+
+Download it from:
+https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption
+
+After downloading, place the file inside:
+
+data/household_power_consumption.txt
+
+
+---
+
+🧠 Methodology
+
+1️⃣ Data Processing
+
+Missing value handling
+
+Type conversion
+
+Time indexing
+
+Daily resampling
+
+
+2️⃣ Exploratory Data Analysis
+
+Seasonal trend detection
+
+Peak demand identification
+
+Weekday vs weekend comparison
+
+
+3️⃣ Forecasting Models
+
+Baseline Moving Average
+
+Linear Regression (time-based feature)
 
 
 
-**Exploratory Data Analysis**
+---
+
+📉 Model Performance
+
+Baseline MAE: ~0.56
+Linear Regression MAE: ~0.24
+
+Linear Regression reduced prediction error by more than 50% compared to the baseline model.
+
+
+---
+
+🖥 Dashboard Features
+
+Daily Energy Trend Visualization
+
+Model Performance Metrics
+
+Forecast vs Actual Comparison
+
+Future Power Consumption Prediction
+
+Peak Demand Detection
+
+Download Forecast Results as CSV
 
 
 
-**Baseline Moving Average Model**
+---
+
+🛠 Tech Stack
+
+Python
+Pandas
+NumPy
+Matplotlib
+Scikit-learn
+Streamlit
+
+
+---
+
+📂 Project Structure
+
+AI_Energy_Forecasting/
+
+analysis.py  → Data loading and EDA
+
+models.py    → Model training and evaluation
+
+main.py      → Script execution version
+
+app.py       → Streamlit dashboard
+
+requirements.txt
+
+README.md
 
 
 
-**Linear Regression Forecast Model**
+---
+
+▶ How to Run Locally
+
+1. Clone the repository: git clone <your-repo-link>
+
+
+2. Install dependencies: pip install -r requirements.txt
+
+
+3. Run the dashboard: streamlit run app.py
 
 
 
-**📈 Results**
+
+---
+
+🔮 Future Improvements
+
+Add seasonal features (Month, Weekday, Year)
+
+Implement ARIMA or Prophet model
+
+Improve forecast accuracy
+
+Deploy for public access
 
 
 
-**Baseline MAE: ~0.56**
+---
 
+👨‍💻 Author
 
+Mani
+Electrical & Electronics Engineering
 
-**Linear Regression MAE: ~0.24**
+---
 
-
-
-**Significant improvement over naive baseline**
-
-
-
-**🚀 Future Improvements**
-
-
-
-**Add seasonal features**
-
-
-
-**Implement ARIMA / Prophet**
-
-
-
-**Build interactive dashboard**
-
+⭐ If you found this project useful, consider giving it a star..
