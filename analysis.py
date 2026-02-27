@@ -1,22 +1,33 @@
+from ucimlrepo import fetch_ucirepo
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# -------------------------------
-# 1. Load and Clean Dataset
-# -------------------------------
-def load_and_clean_data(path):
-    df = pd.read_csv(
-        path,
-        sep=';',
-        parse_dates={'Datetime': ['Date', 'Time']},
+
+def load_and_clean_data():
+
+    dataset = fetch_ucirepo(id=235)
+
+    X = dataset.data.features
+    y = dataset.data.targets
+
+    df = pd.concat([X, y], axis=1)
+
+    # Create Datetime column
+    df['Datetime'] = pd.to_datetime(
+        df['Date'] + ' ' + df['Time'],
         dayfirst=True,
-        low_memory=False
+        errors='coerce'
     )
+
     df.set_index('Datetime', inplace=True)
+
+    df.drop(columns=['Date', 'Time'], inplace=True)
+
     df.replace('?', np.nan, inplace=True)
-    df = df.apply(pd.to_numeric)
+    df = df.apply(pd.to_numeric, errors='coerce')
     df.dropna(inplace=True)
+
     return df
 
 # -------------------------------
