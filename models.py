@@ -1,10 +1,40 @@
 import numpy as np
+import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
-import datetime   # ✅ Added for dynamic file naming
+import matplotlib.pyplot as plt
+import datetime
+from ucimlrepo import fetch_ucirepo
 
 # -------------------------------
-# 4. Train & Evaluate Models
+# 1. Load & Clean Data
+# -------------------------------
+def load_and_clean_data():
+    # Fetch dataset from UCI (Household Power Consumption)
+    dataset = fetch_ucirepo(id=235)
+
+    X = dataset.data.features
+    y = dataset.data.targets
+
+    # Combine features and target
+    df = pd.concat([X, y], axis=1)
+
+    # Create Datetime column
+    df['Datetime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'], dayfirst=True)
+    df.set_index('Datetime', inplace=True)
+
+    # Drop old Date and Time columns
+    df.drop(columns=['Date', 'Time'], inplace=True)
+
+    # Replace missing and convert to numeric
+    df.replace('?', np.nan, inplace=True)
+    df = df.apply(pd.to_numeric)
+    df.dropna(inplace=True)
+
+    return df
+
+# -------------------------------
+# 2. Train & Evaluate Models
 # -------------------------------
 def train_models(daily):
     train_size = int(len(daily) * 0.8)
@@ -33,10 +63,9 @@ def train_models(daily):
     return baseline_mae, lr_mae, test_df, lr_pred
 
 # -------------------------------
-# 5. Plot Results
+# 3. Plot Results
 # -------------------------------
 def plot_forecast(test_df, predictions):
-    import matplotlib.pyplot as plt
     plt.figure(figsize=(12,6))
     plt.plot(test_df['Datetime'], test_df['Global_active_power'], label="Actual")
     plt.plot(test_df['Datetime'], predictions, label="Linear Regression")
@@ -48,3 +77,19 @@ def plot_forecast(test_df, predictions):
     filename = f"forecast_{datetime.date.today()}.png"
     plt.savefig(filename)
     plt.show()
+
+# -------------------------------
+# 4. Full Pipeline
+# -------------------------------
+if __name__ == "__main__":
+    df = load_and_clean_data()
+
+    # Aggregate daily consumption
+    daily = df['Global_active_power'].resample('D').mean()
+
+    baseline_mae, lr_mae, test_df, lr_pred = train_models(daily)
+
+    print(f"Baseline MAE: {baseline_mae:.4f}")
+    print(f"Linear Regression MAE: {lr_mae:.4f}")
+
+    plot_forecast(test_df, lr_pred)

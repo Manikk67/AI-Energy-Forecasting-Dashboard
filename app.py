@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from analysis import load_and_clean_data, get_daily_series
 from models import train_models
 from datetime import timedelta
+from sklearn.linear_model import LinearRegression
 
 st.set_page_config(page_title="Smart Energy Predictor", layout="wide")
 
@@ -14,14 +15,13 @@ st.markdown("AI-based Electricity Consumption Prediction System")
 # -----------------------------
 # Load Data
 # -----------------------------
-df = load_and_clean_data("data/household_power_consumption.txt")
+df = load_and_clean_data()   # ✅ Updated: no path needed
 daily_power = get_daily_series(df)
 
 # -----------------------------
 # Sidebar Controls
 # -----------------------------
 st.sidebar.header("Dashboard Controls")
-
 forecast_days = st.sidebar.slider("Select Future Forecast Days", 7, 60, 30)
 
 # -----------------------------
@@ -53,7 +53,6 @@ baseline_mae, lr_mae, test_df, lr_pred = train_models(daily_power)
 st.subheader("📊 Model Performance")
 
 colA, colB = st.columns(2)
-
 colA.metric("Baseline MAE", round(baseline_mae, 4))
 colB.metric("Linear Regression MAE", round(lr_mae, 4))
 
@@ -88,8 +87,6 @@ last_day_number = len(daily_power)
 future_days = np.arange(last_day_number, last_day_number + forecast_days)
 
 # Re-train on full data
-from sklearn.linear_model import LinearRegression
-
 df_daily = daily_power.reset_index()
 df_daily['Day'] = range(len(df_daily))
 
@@ -97,7 +94,6 @@ model = LinearRegression()
 model.fit(df_daily[['Day']], df_daily['Global_active_power'])
 
 future_pred = model.predict(future_days.reshape(-1,1))
-
 future_dates = [daily_power.index[-1] + timedelta(days=i+1) for i in range(forecast_days)]
 
 future_forecast_df = pd.DataFrame({
@@ -114,7 +110,6 @@ st.divider()
 st.subheader("📥 Download Forecast Data")
 
 download_df = pd.concat([forecast_df, future_forecast_df])
-
 csv = download_df.to_csv().encode('utf-8')
 
 st.download_button(
